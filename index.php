@@ -1,13 +1,16 @@
 <?php
 
 require_once "config/conexao.php";
-
+include "includes/header.php";
+include "includes/menu.php";
 $cmd = $pdo->prepare("SELECT * FROM servicos WHERE descontinuado=b'0'");
 $cmd->execute();
 $serv = $cmd->fetchAll(PDO::FETCH_ASSOC);
 
-include "includes/header.php";
-include "includes/menu.php                                                                                                                                                                                                                                                                                                                                                  ";
+$sql = "SELECT * FROM usuarios WHERE tipo = 2 and ativo = 1 order by id asc limit 4";
+$cmd = $pdo->prepare($sql);
+$cmd->execute();
+$clientes = $cmd->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <header class="container mt-4">
   <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
@@ -95,13 +98,12 @@ include "includes/menu.php                                                      
     </div>
   </section>
 
-  <section id="clientes" class="mt-5">
+  <section id="clientes" class="mt-5 bg-light pb-4 rounded shadow">
     <h2 class="text-center mb-4">Principais Clientes</h2>
     <div class="row text-center">
-      <div class="col-md-3">Sublime Grace Personalizados</div>
-      <div class="col-md-3">Casa Dossica</div>
-      <div class="col-md-3">Tilsp Traduções e Interprtações</div>
-      <div class="col-md-3">Softkleen Informática</div>
+      <?php foreach ($clientes as $cliente): ?>
+      <div class="col-md-3"><?= $cliente['nome'] ?></div>
+      <?php endforeach; ?>
     </div>
   </section>
 
