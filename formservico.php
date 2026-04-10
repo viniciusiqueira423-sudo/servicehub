@@ -1,11 +1,27 @@
 <?php 
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
 require_once "config/conexao.php";
 $nome = $_POST['txtnome'];
 $descricao = $_POST['txtdescricao'];
 $preco = $_POST['txtpreco'];
-
+// preparar o comando SQL para inserção dos dados
 $sql = "insert servicos (nome, descricao, preco) values (:nome, :descricao, :preco)";
 $cmd = $pdo->prepare($sql);
+$cmd->execute([ ":nome"=>$nome, ":descricao"=>$descricao, ":preco"=>$preco]);
+// recuperar o ID do registro recém-inserido
+$id = $pdo->lastInsertId();
+
+if(isset($id)){
+    echo "Serviço cadastrado com sucesso! Com o ID: $id";
+}else{
+    echo "Erro ao cadastrar serviço.";
+}
+}
 ?>
 
 

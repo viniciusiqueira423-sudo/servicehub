@@ -98,7 +98,7 @@ $clientes = $cmd->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </section>
 
-  <section id="clientes" class="mt-5 bg-light pb-4 rounded shadow">
+  <section id="clientes" class="mt-5 bg-light p-4 rounded shadow">
     <h2 class="text-center mb-4">Principais Clientes</h2>
     <div class="row text-center">
       <?php foreach ($clientes as $cliente): ?>
