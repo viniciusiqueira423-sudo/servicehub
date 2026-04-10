@@ -1,4 +1,11 @@
 <?php
+
+require_once "config/conexao.php";
+
+$cmd = $pdo->prepare("SELECT * FROM servicos WHERE descontinuado=b'0'");
+$cmd->execute();
+$serv = $cmd->fetchAll(PDO::FETCH_ASSOC);
+
 include "includes/header.php";
 include "includes/menu.php                                                                                                                                                                                                                                                                                                                                                  ";
 ?>
@@ -32,16 +39,17 @@ include "includes/menu.php                                                      
     <h2 class="text-center mb-4">Serviços Prestados</h2>
 
     <div class="row g-4">
-    
+    <<?php foreach ($serv as $servico): ?>
         <div class="col-md-3">
           <article class="card shadow h-100">
             <div class="card-body">
-              <h5>alterar</h5>
-              <p></p>
-              <p class="fw-bold text-success">R$ 350.00</p>
+              <h5><?= $servico['nome'] ?></h5>
+              <p><?= $servico['descricao'] ?></p>
+              <p class="fw-bold text-success">R$ <?= number_format($servico['preco'], 2, ',', '.') ?></p>
             </div>
           </article>
         </div>
+        <?php endforeach; ?>
     </div>
   </section>
 

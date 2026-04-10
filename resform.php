@@ -8,8 +8,7 @@ include "config/conexao.php";
          $cmd = $pdo->prepare($sql);
          $cmd->execute(["id" => $id]);
          $servicos = $cmd->fetchAll(PDO::FETCH_ASSOC);
-         var_dump()
-            
+            var_dump($servicos);
     }
 if($_SERVER['REQUEST_METHOD']=="GET")
     echo "<h3>chamado pela URL ou formulário method = 'GET'</h3>";
