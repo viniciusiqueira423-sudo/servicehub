@@ -1,4 +1,11 @@
 <?php 
+require_once "config/conexao.php";
+$nome = $_POST['txtnome'];
+$descricao = $_POST['txtdescricao'];
+$preco = $_POST['txtpreco'];
+
+$sql = "insert servicos (nome, descricao, preco) values (:nome, :descricao, :preco)";
+$cmd = $pdo->prepare($sql);
 ?>
 
 
