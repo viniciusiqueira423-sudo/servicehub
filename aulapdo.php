@@ -31,6 +31,10 @@ $clientes = $cmd->fetchAll(PDO::FETCH_ASSOC);
     <title>Aula PDO PHP</title>
 </head>
 <body>
+        <form action="resform.php" method="post">
+        <input type="text" name="txtid" id="">
+        <button type="submit">Enviar</button>
+    </form>
     <h2>Serviços</h2>
     <table border="1" cellpadding=10>
         <tr>
@@ -92,9 +96,5 @@ $clientes = $cmd->fetchAll(PDO::FETCH_ASSOC);
         </tr>
     </table>
 
-    <form action="resform.php" method="post">
-        <input type="text" name="txtid" id="">
-        <button type="submit">Enviar</button>
-    </form>
 </body>
 </html>
