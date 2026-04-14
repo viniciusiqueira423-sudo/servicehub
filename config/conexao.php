@@ -1,10 +1,16 @@
 <?php
 
+function obterPdo(): PDO {
+
+
+
 // $host = "10.91.47.48";
 $host = "10.91.47.44";
 $db = "servicehubdb01"; // nome do banco de dados
 $user = "root";
 $pass = "P@ssw0rd";
+
+static $pdo;
 
 // PHP.NET
 try{
@@ -13,7 +19,9 @@ try{
     // echo "conexão realizada com sucesso!";
     // var_dump($pdo);
 }catch(PDOException $erro){
-    var_dump($erro->getMessage());
-    // die("erro na conexão: ".$erro->getMessage());
+    // var_dump($erro->getMessage());
+    die("erro na conexão: ".$erro->getMessage());
+}
+return $pdo;
 }
 ?>
