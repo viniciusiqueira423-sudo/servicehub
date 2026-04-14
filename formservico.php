@@ -14,7 +14,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
     $sql = "insert servicos (nome, descricao, preco) values(:nome, :descricao, :preco)";
     $cmd = obterPdo()->prepare($sql);
     $cmd->execute([':nome'=>$nome, ':descricao'=>$descricao, ':preco'=>$preco]);
-    $id = $pdo->lastInsertId();
+    $id = obterPdo()->lastInsertId();
 
     if(isset($id)){
         echo "Serviço cadastrado com Sucesso, com o ID ".$id;

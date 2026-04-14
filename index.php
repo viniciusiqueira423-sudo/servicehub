@@ -3,12 +3,14 @@
 require_once "config/conexao.php";
 include "includes/header.php";
 include "includes/menu.php";
-$cmd = $pdo->prepare("SELECT * FROM servicos WHERE descontinuado=b'0'");
+
+
+$cmd = obterPdo()->prepare("SELECT * FROM servicos WHERE descontinuado=b'0'");
 $cmd->execute();
 $serv = $cmd->fetchAll(PDO::FETCH_ASSOC);
 
 $sql = "SELECT * FROM usuarios WHERE tipo = 2 and ativo = 1 order by id asc limit 4";
-$cmd = $pdo->prepare($sql);
+$cmd = obterPdo()->prepare($sql);
 $cmd->execute();
 $clientes = $cmd->fetchAll(PDO::FETCH_ASSOC);
 ?>
