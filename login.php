@@ -3,6 +3,12 @@ session_start(); //Iniciar a sessão ou atualizar a sessão aberta
 include "includes/header.php";
 include "includes/menu.php";
 
+//Evita acesso se ja estiver logado
+if(isset($_SESSION['usuario_id'])){
+  $destino = ($_SESSION['tipo'] == 1)?"admin_dashboard.php":"cliente_dashboard.php";//estrutura do if ternário
+  header("location: $destino");
+}
+
 require "class/usuario.php";
 // //Criar Objeto Usuario
 // $user = new Usuario();

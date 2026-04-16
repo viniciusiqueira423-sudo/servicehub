@@ -1,18 +1,14 @@
-<?php
+<?php 
 session_start();
+if(!isset($_SESSION['usuario_id']) || $_SESSION["tipo"]!=2){
+  header("location: login.php");
+} 
 include "includes/header.php";
 include "includes/menu.php";
-
-//Evitar acesso se não estiver logado ou se o tipo de usuário não for cliente
-if(!isset($_SESSION['usuario_id']) || $_SESSION["tipo"] != 2) {
-  header("location: login.php");
-}
 ?>
 
-
-
 <main class="container mt-5">
-  <h2>Bem-vindo,</h2>
+  <h2>Bem-vindo, <strong><?= $_SESSION['nome'] ?></strong></h2>
   <p><a href="logout.php" class="btn btn-danger btn-sm">Sair</a></p>
   <a href="cliente_perfil.php" class="btn btn-warning btn-sm">Meu Perfil</a>
   <h4 class="mt-4">Minhas Solicitações</h4>
@@ -39,6 +35,7 @@ if(!isset($_SESSION['usuario_id']) || $_SESSION["tipo"] != 2) {
     </tbody>
   </table>
 </main>
-<?php
+
+<?php 
 include "includes/footer.php";
 ?>

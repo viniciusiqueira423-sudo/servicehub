@@ -1,19 +1,21 @@
-<?php
 
-require_once "config/conexao.php";
+<?php 
+//Comando SQL para Listar Serviços de acordo com o banco de dados 
+include_once "config/conexao.php";
+$cmd = obterPdo()->prepare("SELECT * FROM servicos WHERE descontinuado=b'0'");
+$cmd -> execute();
+$servicos = $cmd -> fetchAll(PDO::FETCH_ASSOC);
+
+//Comando SQL para Listar Usuários de acordo com o banco de dados
+$sql = "SELECT nome FROM usuarios WHERE tipo = 2 and ativo = 1 order by id asc limit 4;";
+$cmd = obterPdo()->prepare($sql);
+$cmd -> execute();
+$clientes = $cmd->fetchAll(PDO::FETCH_ASSOC);
+
 include "includes/header.php";
 include "includes/menu.php";
-
-
-$cmd = obterPdo()->prepare("SELECT * FROM servicos WHERE descontinuado=b'0'");
-$cmd->execute();
-$serv = $cmd->fetchAll(PDO::FETCH_ASSOC);
-
-$sql = "SELECT * FROM usuarios WHERE tipo=2 and ativo=1 order by id asc limit 4";
-$cmd = obterPdo()->prepare($sql);
-$cmd->execute();
-$clientes = $cmd->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 <header class="container mt-4">
   <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner rounded shadow">
@@ -24,7 +26,7 @@ $clientes = $cmd->fetchAll(PDO::FETCH_ASSOC);
         <img src="assets/img/banner2.jpg" class="d-block w-100 banner-img" alt="Banner 2">
       </div>
       <div class="carousel-item">
-        <img src="assets/img/banner1.jpg" class="d-block w-100 banner-img" alt="Banner 3">
+        <img src="assets/img/banner3.jpg" class="d-block w-100 banner-img" alt="Banner 3">
       </div>
     </div>
 
@@ -44,17 +46,17 @@ $clientes = $cmd->fetchAll(PDO::FETCH_ASSOC);
     <h2 class="text-center mb-4">Serviços Prestados</h2>
 
     <div class="row g-4">
-    <<?php foreach ($serv as $servico): ?>
+    <?php foreach($servicos as $servico): ?>
         <div class="col-md-3">
           <article class="card shadow h-100">
             <div class="card-body">
               <h5><?= $servico['nome'] ?></h5>
               <p><?= $servico['descricao'] ?></p>
-              <p class="fw-bold text-success">R$ <?= number_format($servico['preco'], 2, ',', '.') ?></p>
+              <p class="fw-bold text-success">R$<?= number_format($servico['preco'], 2, ',' , '.') ?></p>
             </div>
           </article>
         </div>
-        <?php endforeach; ?>
+    <?php endforeach; ?>
     </div>
   </section>
 
@@ -100,10 +102,10 @@ $clientes = $cmd->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </section>
 
-  <section id="clientes" class="mt-5 bg-light p-4 rounded shadow">
+  <section id="clientes" class="mt-5">
     <h2 class="text-center mb-4">Principais Clientes</h2>
     <div class="row text-center">
-      <?php foreach ($clientes as $cliente): ?>
+      <?php foreach($clientes as $cliente): ?>
       <div class="col-md-3"><?= $cliente['nome'] ?></div>
       <?php endforeach; ?>
     </div>
@@ -114,6 +116,6 @@ $clientes = $cmd->fetchAll(PDO::FETCH_ASSOC);
   </div>
 
 </main>
-<?php
+<?php 
 include "includes/footer.php";
 ?>
