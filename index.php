@@ -9,7 +9,7 @@ $cmd = obterPdo()->prepare("SELECT * FROM servicos WHERE descontinuado=b'0'");
 $cmd->execute();
 $serv = $cmd->fetchAll(PDO::FETCH_ASSOC);
 
-$sql = "SELECT * FROM usuarios WHERE tipo = 2 and ativo = 1 order by id asc limit 4";
+$sql = "SELECT * FROM usuarios WHERE tipo=2 and ativo=1 order by id asc limit 4";
 $cmd = obterPdo()->prepare($sql);
 $cmd->execute();
 $clientes = $cmd->fetchAll(PDO::FETCH_ASSOC);

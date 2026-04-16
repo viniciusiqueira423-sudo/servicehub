@@ -1,6 +1,10 @@
 <?php
+session_start();
+if(!isset($_SESSION['usuario_id']) || $_SESSION["tipo"] != 0) 
+header('location: login.php');
 include "includes/header.php";
-include "includes/menu.php                                                                                                                                                                                                                                                                                                                                                  ";
+include "includes/menu.php";
+
 ?>
 
 
