@@ -1,15 +1,13 @@
 <?php
 session_start(); //Iniciar a sessão ou atualizar a sessão aberta
-include "includes/header.php";
-include "includes/menu.php";
 
 //Evita acesso se ja estiver logado
 if(isset($_SESSION['usuario_id'])){
-  $destino = ($_SESSION['tipo'] == 1)?"admin_dashboard.php":"cliente_dashboard.php";//estrutura do if ternário
+  $destino = ($_SESSION['tipo']==1)?"admin_dashboard.php":"cliente_dashboard.php";//estrutura do if ternário
   header("location: $destino");
 }
 
-require "class/usuario.php";
+require "class/Usuario.php";
 // //Criar Objeto Usuario
 // $user = new Usuario();
 // //Chama o método efetuarLogin da classe Usuario
@@ -79,6 +77,3 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 </body>
 
 </html>
-<?php
-include "includes/footer.php";
-?>
