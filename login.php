@@ -3,14 +3,6 @@ session_start(); //Iniciar a sessão ou atualizar a sessão aberta
 include "includes/header.php";
 include "includes/menu.php";
 
-//Evita acesso se ja estiver logado
-if(isset($_SESSION['usuario_id'])){
-  $destino = ($_SESSION['tipo'] == 1)?"admin_dashboard.php":"cliente_dashboard.php";//estrutura do if ternário
-  header("location: $destino");
-}
- 
-
-
 require "class/usuario.php";
 // //Criar Objeto Usuario
 // $user = new Usuario();
@@ -25,42 +17,23 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $msg = "Preencha os dados corretamente";
   }
   $usuario = Usuario::efetuarLogin($email, $senha);
-  if (count($usuario) > 0) { //count conta elementos de um array
+  if (count($usuario) > 0) { //count conta elementos de um array 
     $_SESSION['usuario_id'] = $usuario['id'];
     $_SESSION['nome'] = $usuario['nome'];
     $_SESSION['tipo'] = $usuario['tipo'];
     //Verificando primeiro login
     if ($usuario['primeiro_login'] == 1) {
-      header('location: primeiro_login.php');
+      header('location: primeiro_login.php'); //header comando para encaminhamento de página
       exit;
     }
     if ($usuario['tipo'] == 1) {
-      header('location: admin_dashboard.php');
-
+      header('location: admin_dashboard.php'); //header comando para encaminhamento de página
     } else {
-      header('location: cliente_dashboard.php');
+      header('location: cliente_dashboard.php'); //header comando para encaminhamento de página
     }
   }
 }
 
-
-// explicação de operador de coalescência nula (??) - se a variável for nula, atribui o valor do lado direito
-// O operador de coalescência nula (??) foi adicionado como um truque sintático para o caso trivial de precisar usar
-//  um ternário em conjunto com a função isset(). Ele retorna o primeiro operando se este existir e não for null; caso 
-//  contrário retorna o segundo operando.
-
-// <?php
-// // Obtém o valor de $_GET['user'] e retorna 'nobody'
-// // se ele não existir.
-// $username = $_GET['user'] ?? 'nobody';
-// // Isto equivale a:
-// $username = isset($_GET['user']) ? $_GET['user'] : 'nobody';
-
-// // A coalescência pode ser encadeada: isto irá retornar o primeiro
-// // valor definido entre $_GET['user'], $_POST['user'] e
-// // 'nobody'.
-// $username = $_GET['user'] ?? $_POST['user'] ?? 'nobody';
-// 
 ?>
 
 <!DOCTYPE html>
