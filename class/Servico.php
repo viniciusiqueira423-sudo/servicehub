@@ -1,4 +1,4 @@
-<?php 
+<?php
 // incluir a conexão
 include_once "config/conexao.php";
 //lista do que precisa ser feito para o serviço:
@@ -18,7 +18,8 @@ include_once "config/conexao.php";
 
 
 // declara a classe
-class Servico{
+class Servico
+{
     //atributos
     private $id;
     private $nome;
@@ -88,17 +89,21 @@ class Servico{
     // inserir
     public function inserir(): bool
     {
-        $sql = "INSERT INTO servicos (nome, descricao, preco, descontinuado) 
-        VALUES (:nome, :descricao, :preco, :descontinuado)";
+        if (empty($this->nome) || empty($this->preco)) {
+            return false;
+        }
+
+        $sql = "INSERT INTO servicos (nome, descricao, preco, descontinuado) VALUES (:nome, :descricao, :preco, :descontinuado)";
         $cmd = $this->pdo->prepare($sql);
         $cmd->bindValue(":nome", $this->nome);
         $cmd->bindValue(":descricao", $this->descricao);
         $cmd->bindValue(":preco", $this->preco);
-        $cmd->bindValue(":descontinuado", $this->descontinuado, PDO::PARAM_BOOL);
+        $cmd->bindValue(":descontinuado", (int)$this->descontinuado, PDO::PARAM_INT);
         if ($cmd->execute()) {
             $this->id = $this->pdo->lastInsertId();
             return true;
         }
+
         return false;
     }
     // atualizar
@@ -151,16 +156,18 @@ class Servico{
         return false;
     }
     //excluir (exclusão lógica usando descontinuado)
-    public function excluir(): bool
-    {
-        if (empty($this->id)) {
-            return false;
-        }
-        $sql = "UPDATE servicos SET descontinuado = 1 WHERE id = :id";
-        $cmd = $this->pdo->prepare($sql);
-        $cmd->bindValue(":id", $this->id);
-        return $cmd->execute();
+public function excluir(): bool
+{
+    if (empty($this->id)) {
+        return false;
     }
 
+    $sql = "UPDATE servicos SET descontinuado = 1 WHERE id = :id AND descontinuado = 0";
+
+    $cmd = $this->pdo->prepare($sql);
+    $cmd->bindValue(":id", $this->id);
+    $cmd->execute();
+
+    return $cmd->rowCount() > 0;
 }
-?>
+}
