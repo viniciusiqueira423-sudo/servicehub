@@ -85,7 +85,7 @@ class Usuario{
             return true;
         }
         return false;
-    }    
+    }
     // Listar
     // o método listar deve retornar um array de usuários (array associativo)
     public static function listar():array{
