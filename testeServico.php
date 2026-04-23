@@ -50,4 +50,11 @@ require_once "class/Servico.php";
 // } else {
 //     echo "Erro ao excluir serviço.";
 // }
+
+// // testando o método listarAtivos
+// $servicosAtivos = Servico::listarAtivos();
+// foreach ($servicosAtivos as $servico) {
+//     echo "ID: " . $servico['id'] . "<br>Nome: " . $servico['nome'] . "<br>Descrição: " . $servico['descricao'] . "<br>Preço: R$ " . number_format($servico['preco'], 2, ',', '.') . "<hr>";
+// }
+
 ?>
