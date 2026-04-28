@@ -71,7 +71,6 @@ class Usuario{
         }
     }
     // inserir 
-    // o método inserir deve retornar um booleano (true ou false) para indicar se a operação foi bem sucedida ou não
     public function inserir():bool{
         $sql = "INSERT usuarios (nome, email, senha, tipo)
          values (:nome, :email, :senha, :tipo)";
@@ -85,9 +84,8 @@ class Usuario{
             return true;
         }
         return false;
-    }
+    }    
     // Listar
-    // o método listar deve retornar um array de usuários (array associativo)
     public static function listar():array{
         $cmd = obterPdo()->query("select * from usuarios order by id desc");
         return $cmd->fetchAll(PDO::FETCH_ASSOC);
@@ -117,8 +115,6 @@ class Usuario{
     // Atualizar
     public function atualizar():bool{
         if(!$this->id) return false;
-        // var_dump($this->id);
-        // die();
         $sql = "UPDATE usuarios
                 set nome = :nome, email = :email, tipo = :tipo, ativo = :ativo,
                 primeiro_login = :primeiro_login
@@ -134,7 +130,6 @@ class Usuario{
     }
 
     // Atualizar senha (já deve vir com password_hash)
-    // o método atualizarSenha deve retornar um booleano (true ou false) para indicar se a operação foi bem sucedida ou não
     public function atualizarSenha(string $senhaHash):bool{
         if(!$this->id) return false;
 
@@ -143,8 +138,17 @@ class Usuario{
         $cmd->bindValue(":senha", $senhaHash);
         $cmd->bindValue(":id", $this->id, PDO::PARAM_INT);
 
-     
         return $cmd->execute();
     }
-    
+        // Excluir
+    public function excluir():bool{
+        if(!$this->id) return false;
+
+        $sql = "DELETE FROM usuarios WHERE id = :id";
+        $cmd = $this->pdo->prepare($sql);
+        $cmd->bindValue(":id", $this->id, PDO::PARAM_INT);
+
+        return $cmd->execute();
+    }
+
 }
