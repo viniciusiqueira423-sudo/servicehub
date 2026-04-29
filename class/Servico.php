@@ -1,23 +1,7 @@
 <?php
-// incluir a conexão
+//incluir conexão
 include_once "config/conexao.php";
-//lista do que precisa ser feito para o serviço:
-// id
-// nome
-// descricao
-// preco
-// descontinuado
-
-// Métodos obrigatórios:
-// inserir(): bool
-// atualizar(): bool
-// listar(): array
-// listarAtivos(): array
-// buscarPorId(int $id): bool
-// excluir(int $id): bool (pode ser exclusão lógica usando descontinuado)
-
-
-// declara a classe
+//declara classe
 class Servico
 {
     //atributos
@@ -27,20 +11,19 @@ class Servico
     private $preco;
     private $descontinuado;
     private $pdo;
-
-    //construtor
+    //contrutor
     public function __construct()
     {
         $this->pdo = obterPdo();
     }
-
-    //Getters / Setters
-    //id
+    //Getters e Setters
+    //ID
     public function getId()
     {
         return $this->id;
     }
-    //nome
+
+    //Nome
     public function getNome()
     {
         return $this->nome;
@@ -49,125 +32,104 @@ class Servico
     {
         $this->nome = $nome;
     }
-    //descricao
+    //DESCRIÇÃO
     public function getDescricao()
     {
         return $this->descricao;
     }
     public function setDescricao(string $descricao)
     {
-        $this->descricao = $descricao;
+        return $this->descricao = $descricao;
     }
-    //preco
+    //PREÇO
     public function getPreco()
     {
         return $this->preco;
     }
     public function setPreco(float $preco)
     {
-        $this->preco = $preco;
+        return $this->preco = $preco;
     }
-    //descontinuado
+    //DESCONTINUADO
     public function getDescontinuado()
     {
         return $this->descontinuado;
     }
     public function setDescontinuado(bool $descontinuado)
     {
-        $this->descontinuado = $descontinuado;
+        return $this->descontinuado = $descontinuado;
     }
-    //métodos obrigatórios - Representam os RFs do projeto
-    //Lista de métodos a serem implementados:
-    /*
-    inserir(): bool
-    atualizar(): bool
-    listar(): array
-    listarAtivos(): array
-    buscarPorId(int $id): bool
-    excluir(int $id): bool (pode ser exclusão lógica usando descontinuado)
-    */
-    // inserir
+
+    //Métodos Obrigatórios
+    //Inserir
     public function inserir(): bool
     {
-        if (empty($this->nome) || empty($this->preco)) {
-            return false;
-        }
-
-        $sql = "INSERT INTO servicos (nome, descricao, preco, descontinuado) VALUES (:nome, :descricao, :preco, :descontinuado)";
+        $sql = "INSERT into servicos (nome, descricao, preco, descontinuado) values(:nome, :descricao, :preco, :descontinuado)";
         $cmd = $this->pdo->prepare($sql);
         $cmd->bindValue(":nome", $this->nome);
         $cmd->bindValue(":descricao", $this->descricao);
         $cmd->bindValue(":preco", $this->preco);
-        $cmd->bindValue(":descontinuado", (int)$this->descontinuado, PDO::PARAM_INT);
+        $cmd->bindValue(":descontinuado", $this->descontinuado);
         if ($cmd->execute()) {
-            $this->id = $this->pdo->lastInsertId();
+            $this->id = $this->pdo->lastInsertId();;
             return true;
         }
-
         return false;
     }
-    // atualizar
+    //Buscar por ID
+    public function buscarPorId(int $id): bool
+    {
+        $sql = "SELECT * FROM servicos WHERE id = :id";
+        $cmd = $this->pdo->prepare($sql);
+        $cmd->bindValue(":id", $id);
+        $cmd->execute();
+        if ($cmd->rowCount() > 0) {
+            $dados = $cmd->fetch(PDO::FETCH_ASSOC);
+            $this->id = $dados['id'];
+            $this->setNome($dados['nome']);
+            $this->setDescricao($dados['descricao']);
+            $this->setPreco($dados['preco']);
+            $this->setDescontinuado($dados['descontinuado']);
+            return true;
+        }
+        return false;
+    }
+    //Atualizar
     public function atualizar(): bool
     {
-        if (empty($this->id)) {
-            return false;
-        }
+        if (!$this->id) return false;
         $sql = "UPDATE servicos SET nome = :nome, descricao = :descricao, preco = :preco, descontinuado = :descontinuado WHERE id = :id";
         $cmd = $this->pdo->prepare($sql);
+        $cmd->bindValue(":id", $this->id);
         $cmd->bindValue(":nome", $this->nome);
         $cmd->bindValue(":descricao", $this->descricao);
         $cmd->bindValue(":preco", $this->preco);
-        $cmd->bindValue(":descontinuado", $this->descontinuado, PDO::PARAM_BOOL);
-        $cmd->bindValue(":id", $this->id);
+        $cmd->bindValue(":descontinuado", $this->descontinuado);
         return $cmd->execute();
     }
-    //listar
+
+    //Listar
     public static function listar(): array
     {
         $sql = "SELECT * FROM servicos";
         $cmd = obterPdo()->prepare($sql);
         $cmd->execute();
-        return $cmd->fetchAll(PDO::FETCH_ASSOC);
+        return $cmd->fetchAll();
     }
-    //listarAtivos
+    //Listar Ativos
     public static function listarAtivos(): array
     {
         $sql = "SELECT * FROM servicos WHERE descontinuado = 0";
         $cmd = obterPdo()->prepare($sql);
         $cmd->execute();
-        return $cmd->fetchAll(PDO::FETCH_ASSOC);
+        return $cmd->fetchAll();
     }
-    //Buscar por id
-    public function buscarPorId(int $id): bool
-    {
-        $sql = "SELECT * FROM servicos WHERE id = :id";
-        $cmd = obterPdo()->prepare($sql);
-        $cmd->bindValue(":id", $id);
-        $cmd->execute();
-        $dados = $cmd->fetch(PDO::FETCH_ASSOC);
-        if ($dados) {
-            $this->id = $dados['id'];
-            $this->nome = $dados['nome'];
-            $this->descricao = $dados['descricao'];
-            $this->preco = $dados['preco'];
-            $this->descontinuado = $dados['descontinuado'];
-            return true;
+    //Excluir
+        public function excluir():bool{
+        $sql = "UPDATE servicos SET descontinuado = :descontinuado WHERE id = :id";
+        $cmd = $this->pdo->prepare($sql);
+        $cmd->bindValue(":id",$this->id);
+        $cmd->bindValue(":descontinuado",$this->descontinuado, PDO::PARAM_BOOL);
+        return $cmd->execute();
         }
-        return false;
-    }
-    //excluir (exclusão lógica usando descontinuado)
-public function excluir(): bool
-{
-    if (empty($this->id)) {
-        return false;
-    }
-
-    $sql = "UPDATE servicos SET descontinuado = 1 WHERE id = :id AND descontinuado = 0";
-
-    $cmd = $this->pdo->prepare($sql);
-    $cmd->bindValue(":id", $this->id);
-    $cmd->execute();
-
-    return $cmd->rowCount() > 0;
-}
 }
